@@ -4,8 +4,6 @@ on:
   schedule:
     # 这个 cron 表达式表示每天的 21:00 UTC 触发
     - cron: '0 21 * * *'
-  push: 
-    branches: [master]
 
 env:
   REGISTRY: ghcr.io
@@ -73,7 +71,7 @@ jobs:
         # attestations: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         

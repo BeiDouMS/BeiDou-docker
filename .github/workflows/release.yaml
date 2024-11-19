@@ -4,7 +4,7 @@ on:
   schedule:
     # 这个 cron 表达式表示每天的 21:00 UTC 触发
     - cron: '0 21 * * *'
-
+    
 env:
   REGISTRY: ghcr.io
   RELEASE_IMAGE: ${{ github.repository_owner }}/beidou-server-all
