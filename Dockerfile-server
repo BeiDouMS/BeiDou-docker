@@ -1,0 +1,62 @@
+# Initial Docker support thanks to xinyifly
+# Optimisation performed by wejrox
+
+#############################
+# BeiDou JAR creation stage #
+#############################
+FROM alpine as codestage
+
+RUN apk add --no-cache git
+
+WORKDIR /opt/repository
+
+ARG CACHEBUST=1
+
+RUN git clone https://github.com/BeiDouMS/BeiDou-Server --depth 1
+
+FROM maven:3.9.6-amazoncorretto-21 as builder
+
+# RUN yum -y install glibc-common && \
+#     yum -y install glibc-langpack-zh
+
+# set locale rnv
+# ENV LANG=zh_CN.UTF-8
+# ENV LANGUAGE=zh_CN:zh
+# ENV LC_ALL=zh_CN.UTF-8
+
+# Build in a separated location which won't have permissions issues.
+WORKDIR /opt/build
+
+# Any changes to the pom will affect the entire build, so it should be copied first.
+COPY --from=codestage /opt/repository/BeiDou-Server/pom.xml ./pom.xml
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/src ./gms-server/src
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/pom.xml ./gms-server/pom.xml
+
+# for caching
+RUN mvn dependency:resolve
+
+RUN mvn clean package -U
+
+FROM eclipse-temurin:21-jre-alpine
+
+WORKDIR /opt/server
+
+# RUN mkdir -p ./gms-server/target
+
+COPY --from=builder /opt/build/gms-server/target/BeiDou.jar ./BeiDou.jar
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/src/main/resources/application.yml ./application.yml
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/wz ./wz
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/wz-zh-CN ./wz-zh-CN
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/scripts ./scripts
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/scripts-zh-CN ./scripts-zh-CN
+
+#########################
+# Server creation stage #
+#########################
+
+# Default exposure, although not required if using docker compose.
+# This exposes the login server, and channels.
+# Format for channels: WWCC, where WW is 75 plus the world number and CC is 75 plus the channel number (both zero indexed).
+EXPOSE 8686 8484 7575 7576 7577
+
+ENTRYPOINT ["java", "-jar", "./BeiDou.jar", "--spring.config.location=./application.yml"]

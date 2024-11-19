@@ -1,0 +1,40 @@
+version: '3'
+services:
+  beidou-server-all:
+    container_name: beidou-server-all
+    image: ghcr.io/BeiDouMS/beidou-server-all:v1.5
+    depends_on:
+      beidou-db:
+        condition: service_healthy
+    ports:
+      # Web
+      - "8686:8686" 
+      # Login server
+      - "8484:8484"
+      # Channels.
+      - "7575-7577:7575-7577"
+    volumes:
+      - ./beidou-server-release:/opt/server
+    # healthcheck:
+    #   test: ["CMD", "wget", "--spider", "http://localhost:8686/"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 10
+
+
+  beidou-db:
+    container_name: beidou-db
+    image: mysql:8.4.0
+    environment:
+      # mysql root 默认密码
+      MYSQL_ROOT_PASSWORD: "root" 
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s

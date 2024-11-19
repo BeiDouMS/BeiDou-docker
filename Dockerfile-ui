@@ -1,0 +1,31 @@
+FROM alpine as codestage
+
+RUN apk add --no-cache git 
+
+WORKDIR /opt/repository
+
+ARG CACHEBUST=1
+
+RUN git clone https://github.com/BeiDouMS/BeiDou-Server --depth 1
+
+FROM node:20.15.0 as builder
+
+WORKDIR /opt/ui
+
+# for caching
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/package.json ./
+# for caching
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/yarn.lock ./
+
+#RUN yarn config set registry https://registry.npmmirror.com 如果打包慢使用
+RUN yarn upgrade && yarn
+
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/ ./
+
+RUN yarn build
+
+FROM nginx:alpine
+
+COPY --from=builder /opt/ui/dist/ /usr/share/nginx/html/
+
+EXPOSE 80
