@@ -9,11 +9,11 @@
 ```shell
 # 使用稳定的构建（github release） 
 
-# ghcr.io/BeiDouMS/beidou-server-all:<版本号>
+# ghcr.io/beidoums/beidou-server-all:<版本号>
 
 git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
 # 初始化文件
-sudo docker create --name temp-beidou ghcr.io/BeiDouMS/beidou-server-all:v1.5 && sudo docker cp temp-beidou:/opt/server beidou-server-release && sudo docker rm temp-beidou
+sudo docker create --name temp-beidou ghcr.io/beidoums/beidou-server-all:v1.5 && sudo docker cp temp-beidou:/opt/server beidou-server-release && sudo docker rm temp-beidou
 # 使得配置适配容器数据库
 sed -i 's/localhost:3306/beidou-db:3306/g' ./beidou-server-release/application.yml
 # 一键创建容器并启动
@@ -45,13 +45,13 @@ sudo docker compose -f docker-compose-release.yml logs --tail 500
  
 ```shell
 # 要使用最新的构建 (每日定时构建)  
-# ghcr.io/BeiDouMS/beidou-ui:nightly
-# ghcr.io/BeiDouMS/beidou-server:nightly
+# ghcr.io/beidoums/beidou-ui:nightly
+# ghcr.io/beidoums/beidou-server:nightly
 
 git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
 
 # 初始化文件
-sudo docker create --name temp-beidou ghcr.io/BeiDouMS/beidou-server:nightly  && sudo docker cp temp-beidou:/opt/server beidou-server-nightly && sudo docker rm temp-beidou
+sudo docker create --name temp-beidou ghcr.io/beidoums/beidou-server:nightly  && sudo docker cp temp-beidou:/opt/server beidou-server-nightly && sudo docker rm temp-beidou
 # 使得配置适配容器数据库
 sed -i 's/localhost:3306/beidou-db:3306/g' ./beidou-server-nightly/application.yml
 

@@ -1,4 +1,4 @@
-FROM alpine as codestage
+FROM alpine AS codestage
 
 RUN apk add --no-cache git 
 
@@ -8,7 +8,7 @@ ARG CACHEBUST=1
 
 RUN git clone https://github.com/BeiDouMS/BeiDou-Server --depth 1
 
-FROM node:20.15.0 as builder
+FROM node:20.15.0 AS builder
 
 WORKDIR /opt/ui
 

@@ -3,7 +3,7 @@ services:
   beidou-server:
     container_name: beidou-server
     # nightly 为每日构建
-    image: ghcr.io/BeiDouMS/beidou-server:nightly
+    image: ghcr.io/beidoums/beidou-server:nightly
     # 自己构建..
     # build:
     #   context: .
@@ -29,7 +29,7 @@ services:
   beidou-ui:
     container_name: beidou-ui
     # nightly 为每日构建
-    image: ghcr.io/BeiDouMS/beidou-ui:nightly
+    image: ghcr.io/beidoums/beidou-ui:nightly
     # 自己构建..
     # build:
     #   context: .

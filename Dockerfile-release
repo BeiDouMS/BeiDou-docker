@@ -1,5 +1,5 @@
 # 使用基础镜像
-FROM ubuntu:20.04 as builder
+FROM ubuntu:20.04 AS builder
 
 # 安装需要的工具（curl, jq）
 RUN apt-get update && \
