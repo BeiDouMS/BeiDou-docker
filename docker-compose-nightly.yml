@@ -18,7 +18,7 @@ services:
     volumes:
       - ./beidou-server-nightly:/opt/server
     healthcheck:
-      test: ["CMD", "wget", "--method=DELETE" , "--spider", "http://localhost:8686/auth/v1/logout"]
+      test: ["CMD", "sh", "-c", "netstat -tunlp | grep 0.0.0.0:8484 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
