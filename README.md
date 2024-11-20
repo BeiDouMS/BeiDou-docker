@@ -73,7 +73,15 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 # beidou-server-nightly/wz-zh-CN
 ```
 
-若有连接问题 检查 `application.yml` 中的 ip配置
+
+
+
+### 若有连接问题 检查 `application.yml` 中的 ip配置
+
+`ghcr.io/beidoums/beidou-server-all:<version>` 为容器化的稳定版
+
+`ghcr.io/beidoums/beidou-server:nightly` `ghcr.io/beidoums/beidou-ui:nightly` 是每日构建的尝鲜版
+
 
 
 [![BeiDou Release Workflow](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml/badge.svg)](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml) 
