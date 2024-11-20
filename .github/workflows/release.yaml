@@ -31,13 +31,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-release-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-release-buildx-
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-release-buildx-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-release-buildx-
+        
       - name: get latest version
         run: |
           LATEST_RELEASE_VERSION=$(curl -fsSL https://api.github.com/repos/BeiDouMS/BeiDou-Server/releases/latest | jq -r '.name')
