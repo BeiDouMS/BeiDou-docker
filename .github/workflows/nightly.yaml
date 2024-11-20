@@ -7,8 +7,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  BACKEND_IMAGE: ${{ github.repository_owner }}/beidou-server
-  FRONTEND_IMAGE: ${{ github.repository_owner }}/beidou-ui
+  BACKEND_IMAGE: beidou-server
+  FRONTEND_IMAGE: beidou-ui
 
 concurrency: 
   group: ${{github.workflow}} - ${{github.ref}}
@@ -43,6 +43,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-backend-buildx-
 
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
       - name: Build and push
         id: push
         uses: docker/build-push-action@v6
@@ -50,7 +56,7 @@ jobs:
           push: true
           context: .
           file: Dockerfile-server
-          tags: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:nightly
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.BACKEND_IMAGE }}:nightly
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
@@ -58,7 +64,7 @@ jobs:
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1
     #     with:
-    #       subject-name: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}
+    #       subject-name: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.BACKEND_IMAGE }}
     #       subject-digest: ${{ steps.push.outputs.digest }}
     #       push-to-registry: true
 
@@ -90,6 +96,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-frontend-buildx-
 
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
       - name: Build and push
         id: push
         uses: docker/build-push-action@v6
@@ -97,7 +109,7 @@ jobs:
           push: true
           context: .
           file: Dockerfile-ui
-          tags: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:nightly
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.FRONTEND_IMAGE }}:nightly
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
@@ -105,6 +117,6 @@ jobs:
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1
     #     with:
-    #       subject-name: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}
+    #       subject-name: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.FRONTEND_IMAGE }}
     #       subject-digest: ${{ steps.push.outputs.digest }}
     #       push-to-registry: true

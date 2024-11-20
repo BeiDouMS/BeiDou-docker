@@ -7,7 +7,7 @@ on:
     
 env:
   REGISTRY: ghcr.io
-  RELEASE_IMAGE: ${{ github.repository_owner }}/beidou-server-all
+  RELEASE_IMAGE: beidou-server-all
 
 jobs:
   Backend:
@@ -42,6 +42,12 @@ jobs:
           LATEST_RELEASE_VERSION=$(curl -fsSL https://api.github.com/repos/BeiDouMS/BeiDou-Server/releases/latest | jq -r '.name')
           echo "LATEST_RELEASE_VERSION=${LATEST_RELEASE_VERSION}" >> $GITHUB_ENV
 
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
       - name: Build and push
         id: push
         uses: docker/build-push-action@v6
@@ -49,13 +55,13 @@ jobs:
           push: true
           context: .
           file: Dockerfile-release
-          tags: ${{ env.REGISTRY }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
   
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1
     #     with:
-    #       subject-name: ${{ env.REGISTRY }}/${{ env.RELEASE_IMAGE }}
+    #       subject-name: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}
     #       subject-digest: ${{ steps.push.outputs.digest }}
     #       push-to-registry: true
