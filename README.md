@@ -11,7 +11,7 @@
 
 # ghcr.io/BeiDouMS/beidou-server-all:<版本号>
 
-git clone https://github.com/BeiDouMS/beidou-docker && cd beidou-docker
+git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
 # 初始化文件
 sudo docker create --name temp-beidou ghcr.io/BeiDouMS/beidou-server-all:v1.5 && sudo docker cp temp-beidou:/opt/server beidou-server-release && sudo docker rm temp-beidou
 # 使得配置适配容器数据库
@@ -48,7 +48,7 @@ sudo docker compose -f docker-compose-release.yml logs --tail 500
 # ghcr.io/BeiDouMS/beidou-ui:nightly
 # ghcr.io/BeiDouMS/beidou-server:nightly
 
-git clone https://github.com/BeiDouMS/beidou-docker && cd beidou-docker
+git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
 
 # 初始化文件
 sudo docker create --name temp-beidou ghcr.io/BeiDouMS/beidou-server:nightly  && sudo docker cp temp-beidou:/opt/server beidou-server-nightly && sudo docker rm temp-beidou
