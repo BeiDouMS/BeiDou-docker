@@ -1,6 +1,7 @@
 name: BeiDou Nightly Workflow
 
 on:
+  workflow_dispatch:
   schedule:
     # 这个 cron 表达式表示每天的 21:00 UTC 触发
     - cron: '0 21 * * *'
