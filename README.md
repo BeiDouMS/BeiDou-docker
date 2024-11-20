@@ -74,3 +74,8 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 ```
 
 若有连接问题 检查 `application.yml` 中的 ip配置
+
+
+[![BeiDou Release Workflow](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml/badge.svg)](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml) 
+
+[![BeiDou Nightly Workflow](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/nightly.yaml/badge.svg)](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/nightly.yaml)
