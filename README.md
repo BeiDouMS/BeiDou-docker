@@ -9,6 +9,10 @@
 ```shell
 # 使用稳定的构建（github release） 
 
+# docker.io 源
+# sleepnap/beidou-server-all:<版本号>
+
+# ghcr.io 源
 # ghcr.io/beidoums/beidou-server-all:<版本号>
 
 git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
@@ -45,6 +49,12 @@ sudo docker compose -f docker-compose-release.yml logs --tail 500
  
 ```shell
 # 要使用最新的构建 (每日定时构建)  
+
+# docker.io 源
+# sleepnap/beidou-ui:nightly
+# sleepnap/beidou-server:nightly
+
+# ghcr.io 源
 # ghcr.io/beidoums/beidou-ui:nightly
 # ghcr.io/beidoums/beidou-server:nightly
 
@@ -76,9 +86,9 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 
 ### 若有连接问题 检查 `application.yml` 中的 ip配置 
 
-`ghcr.io/beidoums/beidou-server-all:<version>` 为容器化的稳定版
+`beidou-server-all:<version>` 为容器化的稳定版
 
-`ghcr.io/beidoums/beidou-server:nightly` `ghcr.io/beidoums/beidou-ui:nightly` 是每日构建的尝鲜版
+`beidou-server:nightly` `beidou-ui:nightly` 是每日构建的尝鲜版
 
 
 
