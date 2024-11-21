@@ -7,7 +7,7 @@ on:
     - cron: '0 21 * * *'
 
 env:
-  REGISTRY: ghcr.io
+  GHCR_REGISTRY: ghcr.io
   BACKEND_IMAGE: beidou-server
   FRONTEND_IMAGE: beidou-ui
 
@@ -28,11 +28,17 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
-      - name: Log in to the Container registry
+
+      - name: Log in to the Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Log in to the Github Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -57,7 +63,9 @@ jobs:
           push: true
           context: .
           file: Dockerfile-server
-          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.BACKEND_IMAGE }}:nightly
+          tags: |
+            ${{ secrets.DOCKER_USER }}/${{ env.BACKEND_IMAGE }}:nightly
+            ${{ env.GHCR_REGISTRY }}/${{ env.OWNER_LC }}/${{ env.BACKEND_IMAGE }}:nightly
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
@@ -65,7 +73,7 @@ jobs:
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1
     #     with:
-    #       subject-name: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.BACKEND_IMAGE }}
+    #       subject-name: ${{ env.GHCR_REGISTRY }}/${{ env.OWNER_LC }}/${{ env.BACKEND_IMAGE }}
     #       subject-digest: ${{ steps.push.outputs.digest }}
     #       push-to-registry: true
 
@@ -82,10 +90,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         
-      - name: Log in to the Container registry
+      - name: Log in to the Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Log in to the Github Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -110,7 +124,9 @@ jobs:
           push: true
           context: .
           file: Dockerfile-ui
-          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.FRONTEND_IMAGE }}:nightly
+          tags: |
+            ${{ secrets.DOCKER_USER }}/${{ env.FRONTEND_IMAGE }}:nightly
+            ${{ env.GHCR_REGISTRY }}/${{ env.OWNER_LC }}/${{ env.FRONTEND_IMAGE }}:nightly
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
@@ -118,6 +134,6 @@ jobs:
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1
     #     with:
-    #       subject-name: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.FRONTEND_IMAGE }}
+    #       subject-name: ${{ env.GHCR_REGISTRY }}/${{ env.OWNER_LC }}/${{ env.FRONTEND_IMAGE }}
     #       subject-digest: ${{ steps.push.outputs.digest }}
     #       push-to-registry: true
