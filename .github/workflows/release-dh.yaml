@@ -26,7 +26,7 @@ jobs:
         with:
           # registry: ${{ env.REGISTRY }}
           username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          password: ${{ secrets.DOCKER_PASS }}
 
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
