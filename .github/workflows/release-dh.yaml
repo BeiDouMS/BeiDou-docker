@@ -5,6 +5,7 @@ on:
     
 env:
   REGISTRY: docker.io
+  DOCKER_OWNER: sleepnap
   RELEASE_IMAGE: beidou-server-all
 
 jobs:
@@ -54,13 +55,13 @@ jobs:
           push: true
           context: .
           file: Dockerfile-release
-          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.DOCKER_OWNER }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
   
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1
     #     with:
-    #       subject-name: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}
+    #       subject-name: ${{ env.REGISTRY }}/${{ env.DOCKER_OWNER }}/${{ env.RELEASE_IMAGE }}
     #       subject-digest: ${{ steps.push.outputs.digest }}
     #       push-to-registry: true

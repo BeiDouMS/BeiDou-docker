@@ -57,7 +57,8 @@ jobs:
           push: true
           context: .
           file: Dockerfile-release
-          tags: ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
   

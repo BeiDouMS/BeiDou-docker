@@ -74,13 +74,16 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 ```
 
 
-
-
-### 若有连接问题 检查 `application.yml` 中的 ip配置
+### 若有连接问题 检查 `application.yml` 中的 ip配置 
 
 `ghcr.io/beidoums/beidou-server-all:<version>` 为容器化的稳定版
 
 `ghcr.io/beidoums/beidou-server:nightly` `ghcr.io/beidoums/beidou-ui:nightly` 是每日构建的尝鲜版
+
+
+
+
+
 
 
 
