@@ -17,6 +17,7 @@ services:
       - "7575-7577:7575-7577"
     # 如果要挂载wz scripts 先执行以下指令 ↓ 再放开volumes 设置
     # sudo docker create --name temp-beidou ghcr.io/beidoums/beidou-server:nightly  && sudo docker cp temp-beidou:/opt/server beidou-server-nightly && sudo docker rm temp-beidou
+    # 注意 命令行参数的优先级高于 application.yml 配置文件
     # volumes:
     #   - ./beidou-server-nightly:/opt/server
     entrypoint: 
