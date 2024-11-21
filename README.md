@@ -60,10 +60,8 @@ sudo docker compose -f docker-compose-release.yml logs --tail 500
 
 git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
 
-# 初始化文件
-sudo docker create --name temp-beidou ghcr.io/beidoums/beidou-server:nightly  && sudo docker cp temp-beidou:/opt/server beidou-server-nightly && sudo docker rm temp-beidou
-# 使得配置适配容器数据库
-sed -i 's/localhost:3306/beidou-db:3306/g' ./beidou-server-nightly/application.yml
+# 先修改 docker-compose-nightly.yml 中的 数据库,ip 设置 ...
+# 若要访问管理页面， 还需设置app.vue
 
 sudo docker compose -f docker-compose-nightly.yml up -d
 sudo docker compose -f docker-compose-nightly.yml stop

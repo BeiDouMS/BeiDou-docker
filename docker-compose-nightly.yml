@@ -15,8 +15,23 @@ services:
       - "8484:8484"
       # Channels.
       - "7575-7577:7575-7577"
-    volumes:
-      - ./beidou-server-nightly:/opt/server
+    # 如果要挂载wz scripts 先执行以下指令 ↓ 再放开volumes 设置
+    # sudo docker create --name temp-beidou ghcr.io/beidoums/beidou-server:nightly  && sudo docker cp temp-beidou:/opt/server beidou-server-nightly && sudo docker rm temp-beidou
+    # volumes:
+    #   - ./beidou-server-nightly:/opt/server
+    entrypoint: 
+      - java
+      - -jar
+      - ./BeiDou.jar
+      - --spring.config.location=./application.yml
+      - --mybatis-flex.datasource.mysql.url=jdbc:mysql://localhost:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      - --mybatis-flex.datasource.mysql.username=root
+      - --mybatis-flex.datasource.mysql.password=root
+      - --gms.service.wan-host=127.0.0.1
+      - --gms.service.lan-host=127.0.0.1
+      - --gms.service.localhost=127.0.0.1
+  #    跨域限制,设置为前端的路径
+  #    - --app.vue=http://localhost:8787
     healthcheck:
       test: ["CMD", "sh", "-c", "netstat -tunlp | grep 0.0.0.0:8484 || exit 1"]
       interval: 10s
