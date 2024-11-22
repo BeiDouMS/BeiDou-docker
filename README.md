@@ -82,19 +82,24 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 ```
 
 
-### 若有连接问题 检查 `application.yml` 中的 ip配置 
+### 若有连接问题 检查 `application.yml` 中的 ip 配置 
 
-`beidou-server-all:<version>` 为容器化的稳定版
+### 镜像名解释
 
-`beidou-server:nightly` `beidou-ui:nightly` 是每日构建的尝鲜版
+`beidou-server-all:<version>` 为带有版本号的稳定版
 
+`beidou-server:nightly` , `beidou-ui:nightly` 是每日五点基于最新代码构建的尝鲜版，前后端分开打包，需要一起安装，推荐使用 `docker-compose`
 
-
-
-
-
-
+---
 
 [![BeiDou Release Workflow](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml/badge.svg)](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml) 
 
 [![BeiDou Nightly Workflow](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/nightly.yaml/badge.svg)](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/nightly.yaml)
+
+# Docker 仓库地址
+
+[BeiDou Release](https://hub.docker.com/r/sleepnap/beidou-server-all)
+
+[BeiDou Server](https://hub.docker.com/r/sleepnap/beidou-server)
+
+[BeiDou UI](https://hub.docker.com/r/sleepnap/beidou-ui)

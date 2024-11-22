@@ -31,8 +31,8 @@ services:
       - --gms.service.wan-host=127.0.0.1
       - --gms.service.lan-host=127.0.0.1
       - --gms.service.localhost=127.0.0.1
-  #    跨域限制,设置为前端的路径
-  #    - --app.vue=http://localhost:8787
+  #      这是容器内的跨域限制, 设置为前端的路径
+  #    - --app.vue=http://<宿主机IP>:8686 
     healthcheck:
       test: ["CMD", "sh", "-c", "netstat -tunlp | grep 0.0.0.0:8484 || exit 1"]
       interval: 10s
