@@ -1,3 +1,22 @@
+
+<h1 align="center">
+  <img height="160" width="240" src="https://github.com/BeiDouMS/BeiDou-Server/blob/master/gms-ui/src/assets/logo.png?raw=true" alt="BeiDouMS / BeiDou-Server">
+  <br>
+  BeiDouMS Docker
+
+  <br>
+
+![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-server-all?style=for-the-badge&label=beidou-server-all&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fsleepnap%2Fbeidou-server-all)
+![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-server?style=for-the-badge&label=beidou-server&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fsleepnap%2Fbeidou-server)
+![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-ui?style=for-the-badge&label=beidou-ui&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fsleepnap%2Fbeidou-ui)
+
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeiDouMS/BeiDou-docker/release.yaml?style=for-the-badge&label=release%20build)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeiDouMS/BeiDou-docker/nightly.yaml?style=for-the-badge&label=nightly%20build)
+
+</h1>
+
+<br>
+
 # 通过Docker部署BeiDouMS
 ### 先决条件
 * 已安装 Docker && Docker-compose 
@@ -89,17 +108,3 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 `beidou-server-all:<version>` 为带有版本号的稳定版
 
 `beidou-server:nightly` , `beidou-ui:nightly` 是每日五点基于最新代码构建的尝鲜版，前后端分开打包，需要一起安装，推荐使用 `docker-compose`
-
----
-
-[![BeiDou Release Workflow](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml/badge.svg)](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/release.yaml) 
-
-[![BeiDou Nightly Workflow](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/nightly.yaml/badge.svg)](https://github.com/BeiDouMS/BeiDou-docker/actions/workflows/nightly.yaml)
-
-# Docker 仓库地址
-
-[BeiDou Release](https://hub.docker.com/r/sleepnap/beidou-server-all)
-
-[BeiDou Server](https://hub.docker.com/r/sleepnap/beidou-server)
-
-[BeiDou UI](https://hub.docker.com/r/sleepnap/beidou-ui)
