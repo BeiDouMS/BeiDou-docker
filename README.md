@@ -6,9 +6,9 @@
 
   <br>
 
-![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-server-all?style=for-the-badge&label=beidou-server-all&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fsleepnap%2Fbeidou-server-all)
-![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-server?style=for-the-badge&label=beidou-server&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fsleepnap%2Fbeidou-server)
-![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-ui?style=for-the-badge&label=beidou-ui&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fsleepnap%2Fbeidou-ui)
+[![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-server-all?style=for-the-badge&label=beidou-server-all)](https://hub.docker.com/r/sleepnap/beidou-server-all)
+[![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-server?style=for-the-badge&label=beidou-server)](https://hub.docker.com/r/sleepnap/beidou-server)
+[![Docker Image Version](https://img.shields.io/docker/v/sleepnap/beidou-ui?style=for-the-badge&label=beidou-ui)](https://hub.docker.com/r/sleepnap/beidou-ui)
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeiDouMS/BeiDou-docker/release.yaml?style=for-the-badge&label=release%20build)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BeiDouMS/BeiDou-docker/nightly.yaml?style=for-the-badge&label=nightly%20build)
