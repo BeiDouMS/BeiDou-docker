@@ -61,11 +61,11 @@ services:
     ports:
       # Web
       - "8686:80"
-    networks:
-      - beidou-network
     depends_on:
       - beidou-server
-
+    networks:
+      - beidou-network
+      
   beidou-db:
     container_name: beidou-db
     image: mysql:8.4.0
