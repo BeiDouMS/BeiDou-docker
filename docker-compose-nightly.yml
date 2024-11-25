@@ -31,8 +31,12 @@ services:
       - --gms.service.wan-host=127.0.0.1
       - --gms.service.lan-host=127.0.0.1
       - --gms.service.localhost=127.0.0.1
-  #      如果前端访问失败，可以尝试修改↓
-  #    - --app.vue=http://<宿主机IP>:8686 
+      #  如果前端访问失败，可以尝试修改↓
+      # - --app.vue=<前端url>
+      #  生产环境请自行生成密钥,并关闭 swagger
+      # - --jwt.secret=50da066e-6080-40f5-a173-86bd27d4f674
+      # - --springdoc.api-docs.enabled=true
+      # - --springdoc.swagger-ui.enabled=true
     healthcheck:
       test: ["CMD", "sh", "-c", "netstat -tunlp | grep 0.0.0.0:8484 || exit 1"]
       interval: 10s
