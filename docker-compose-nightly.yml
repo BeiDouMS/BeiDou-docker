@@ -41,6 +41,8 @@ services:
     depends_on:
       beidou-db:
         condition: service_healthy
+    networks:
+      - beidou-network
 
   beidou-ui:
     container_name: beidou-ui
@@ -55,9 +57,10 @@ services:
     ports:
       # Web
       - "8686:80"
+    networks:
+      - beidou-network
     depends_on:
-      beidou-server:
-        condition: service_healthy
+      - beidou-server
 
   beidou-db:
     container_name: beidou-db
@@ -75,3 +78,9 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+    networks:
+      - beidou-network
+
+networks:
+  beidou-network:
+    driver: bridge
