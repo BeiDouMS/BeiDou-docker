@@ -25,13 +25,13 @@ services:
       - -jar
       - ./BeiDou.jar
       - --spring.config.location=./application.yml
-      - --mybatis-flex.datasource.mysql.url=jdbc:mysql://localhost:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      - --mybatis-flex.datasource.mysql.url=jdbc:mysql://beidou-db:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
       - --mybatis-flex.datasource.mysql.username=root
       - --mybatis-flex.datasource.mysql.password=root
       - --gms.service.wan-host=127.0.0.1
       - --gms.service.lan-host=127.0.0.1
       - --gms.service.localhost=127.0.0.1
-  #      这是容器内的跨域限制, 设置为前端的路径
+  #      如果前端访问失败，可以尝试修改↓
   #    - --app.vue=http://<宿主机IP>:8686 
     healthcheck:
       test: ["CMD", "sh", "-c", "netstat -tunlp | grep 0.0.0.0:8484 || exit 1"]
