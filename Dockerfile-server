@@ -37,18 +37,19 @@ RUN mvn dependency:resolve
 
 RUN mvn clean package -U
 
+RUN mkdir result && mv ./gms-server/target/BeiDou.jar ./result/BeiDou.jar
+
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/src/main/resources/application.yml ./result/application.yml
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/wz ./result/wz
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/wz-zh-CN ./result/wz-zh-CN
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/scripts ./result/scripts
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/scripts-zh-CN ./result/scripts-zh-CN
+
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /opt/server
 
-# RUN mkdir -p ./gms-server/target
-
-COPY --from=builder /opt/build/gms-server/target/BeiDou.jar ./BeiDou.jar
-COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/src/main/resources/application.yml ./application.yml
-COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/wz ./wz
-COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/wz-zh-CN ./wz-zh-CN
-COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/scripts ./scripts
-COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/scripts-zh-CN ./scripts-zh-CN
+COPY --from=builder /opt/build/result ./
 
 #########################
 # Server creation stage #
