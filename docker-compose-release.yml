@@ -3,6 +3,8 @@ services:
   beidou-server-all:
     container_name: beidou-server-all
     image: ghcr.io/beidoums/beidou-server-all:v1.5
+    environment:
+      TZ: Asia/Shanghai
     depends_on:
       beidou-db:
         condition: service_healthy

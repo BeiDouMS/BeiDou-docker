@@ -8,6 +8,8 @@ services:
     # build:
     #   context: .
     #   dockerfile: Dockerfile-server
+    environment:
+      TZ: Asia/Shanghai
     ports:
       # Web 由nginx路由
       # - "8686:8686" 
