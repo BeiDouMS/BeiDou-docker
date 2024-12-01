@@ -58,11 +58,12 @@ services:
     # build:
     #   context: .
     #   dockerfile: Dockerfile-ui
-    volumes:
-      - ./nginx-ui.conf:/etc/nginx/conf.d/default.conf
+    # 可以挂载出来 修改端口，添加证书
+    # volumes:
+    #   - ./nginx-ui.conf:/etc/nginx/conf.d/default.conf
     ports:
       # Web
-      - "8686:80"
+      - "8686:8686"
     depends_on:
       - beidou-server
     networks:
