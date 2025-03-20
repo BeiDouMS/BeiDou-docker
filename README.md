@@ -19,6 +19,9 @@
 <br>
 
 # 通过Docker部署BeiDouMS
+
+[视频教程](https://www.bilibili.com/video/BV12j6WYDEuQ/)
+
 ### 先决条件
 * 已安装 Docker && Docker-compose 
 
