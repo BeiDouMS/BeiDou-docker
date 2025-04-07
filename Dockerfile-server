@@ -47,9 +47,11 @@ COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/scripts-zh-CN ./r
 
 FROM eclipse-temurin:21-jre-alpine
 
-WORKDIR /opt/server
+COPY --from=builder /opt/build/result /opt/server_backup
 
-COPY --from=builder /opt/build/result ./
+COPY entrypoint-nightly.sh /
+
+VOLUME /opt/server
 
 #########################
 # Server creation stage #
@@ -60,4 +62,4 @@ COPY --from=builder /opt/build/result ./
 # Format for channels: WWCC, where WW is 75 plus the world number and CC is 75 plus the channel number (both zero indexed).
 EXPOSE 8686 8484 7575 7576 7577
 
-ENTRYPOINT ["java", "-jar", "./BeiDou.jar", "--spring.config.location=./application.yml"]
+ENTRYPOINT ["/entrypoint-nightly.sh"]
