@@ -51,6 +51,8 @@ COPY --from=builder /opt/build/result /opt/server_backup
 
 COPY entrypoint-nightly.sh /
 
+RUN chmod +x /entrypoint-nightly.sh
+
 VOLUME /opt/server
 
 #########################
