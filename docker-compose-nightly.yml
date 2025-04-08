@@ -19,8 +19,8 @@ services:
       - "7575-7577:7575-7577"
     # 如果要挂载wz scripts 取消注释 volumes 设置
     # 注意 命令行参数的优先级高于 application.yml 配置文件
-    # volumes:
-    #   - ./beidou-server-nightly:/opt/server
+    volumes:
+      - ./beidou-server-nightly:/opt/server
     command:
       - --mybatis-flex.datasource.mysql.url=jdbc:mysql://beidou-db:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
       - --mybatis-flex.datasource.mysql.username=root
