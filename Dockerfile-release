@@ -8,27 +8,31 @@ RUN apt-get update && \
 
 ARG GITHUB_OWNER=BeiDouMS
 ARG GITHUB_REPO=BeiDou-Server
-ARG ASSET_NAME_PREFIX=BeiDou-Server
-ARG ASSET_NAME_EXT=tar.gz
+# ARG ASSET_NAME_PREFIX=BeiDou-Server
+# ARG ASSET_NAME_EXT=tar.gz
+ARG RELEASE_PREFIX_GIT_TAG=Release
+ARG RELEASE_VERSION
 
-# 获取最新 release 的 targz
-RUN curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest \
+# 根据传入的参数中的版本号取 release 中的 tar.gz
+RUN curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${RELEASE_PREFIX_GIT_TAG}${RELEASE_VERSION} \
     | jq -r '.assets[] | select(.name | endswith(".tar.gz")) | .browser_download_url' \
     | xargs -n 1 curl -fsSL -o latest_release.tar.gz
 
-RUN mkdir -p /opt/server
+RUN mkdir -p /opt/server_unzip
 
-RUN tar -xzvf latest_release.tar.gz -C /opt/server --strip-components=1
+RUN tar -xzvf latest_release.tar.gz -C /opt/server_unzip --strip-components=1
 
 # alpine好像缺点东西
 FROM ubuntu:20.04
 
-WORKDIR /opt/server
+COPY --from=builder /opt/server_unzip /opt/server_backup
 
-COPY --from=builder /opt/server /opt/server
+COPY entrypoint-release.sh /
+
+RUN chmod +x entrypoint-release.sh
+
+VOLUME /opt/server
 
 EXPOSE 8686 8484 7575 7576 7577
 
-# 容器里就不用nohup了
-# CMD ["sh" , "launch.sh"]
-ENTRYPOINT ["./jdk-21.0.2/bin/java","-Dspring.config.location=application.yml","-jar","BeiDou.jar"]
+ENTRYPOINT ["/entrypoint-release.sh"]

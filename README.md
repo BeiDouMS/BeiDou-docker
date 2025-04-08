@@ -39,10 +39,6 @@
 # ghcr.io/beidoums/beidou-server-all:<版本号>
 
 git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
-# 初始化文件
-sudo docker create --name temp-beidou ghcr.io/beidoums/beidou-server-all:v1.5 && sudo docker cp temp-beidou:/opt/server beidou-server-release && sudo docker rm temp-beidou
-# 使得配置适配容器数据库
-sed -i 's/localhost:3306/beidou-db:3306/g' ./beidou-server-release/application.yml
 # 一键创建容器并启动
 sudo docker compose -f docker-compose-release.yml up -d
 # 关闭服务

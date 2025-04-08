@@ -2,9 +2,12 @@ name: BeiDou Release Workflow
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   # 这个 cron 表达式表示每天的 21:00 UTC 触发
-  #   - cron: '0 21 * * *'
+    inputs:
+      release_version:
+        description: "no prefix release version"
+        required: true
+        type: string
+
     
 env:
   GHCR_REGISTRY: ghcr.io
@@ -37,19 +40,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Cache Docker layers
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-release-buildx-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-release-buildx-
-        
-      - name: get latest version
-        run: |
-          LATEST_RELEASE_VERSION=$(curl -fsSL https://api.github.com/repos/BeiDouMS/BeiDou-Server/releases/latest | jq -r '.name')
-          echo "LATEST_RELEASE_VERSION=${LATEST_RELEASE_VERSION}" >> $GITHUB_ENV
-
       - name: Set lower case owner name
         run: |
           echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
@@ -64,10 +54,12 @@ jobs:
           context: .
           file: Dockerfile-release
           tags: |
-            ${{ secrets.DOCKER_USER }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
-            ${{ env.GHCR_REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}:v${{ env.LATEST_RELEASE_VERSION }}
+            ${{ secrets.DOCKER_USER }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
+            ${{ env.GHCR_REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args: |
+            RELEASE_VERSION=${{ inputs.release_version }}
   
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1

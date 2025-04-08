@@ -2,12 +2,9 @@ version: '3.4'
 services:
   beidou-server-all:
     container_name: beidou-server-all
-    image: ghcr.io/beidoums/beidou-server-all:v1.5
+    image: ghcr.io/beidoums/beidou-server-all:v1.8
     environment:
       TZ: Asia/Shanghai
-    depends_on:
-      beidou-db:
-        condition: service_healthy
     ports:
       # Web
       - "8686:8686" 
@@ -17,12 +14,23 @@ services:
       - "7575-7577:7575-7577"
     volumes:
       - ./beidou-server-release:/opt/server
+    command: 
+      - --mybatis-flex.datasource.mysql.url=jdbc:mysql://beidou-db:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      - --mybatis-flex.datasource.mysql.username=root
+      - --mybatis-flex.datasource.mysql.password=root
+      - --gms.service.wan-host=127.0.0.1
+      - --gms.service.lan-host=127.0.0.1
+      - --gms.service.localhost=127.0.0.1
     # healthcheck:
     #   test: ["CMD", "wget", "--spider", "http://localhost:8686/"]
     #   interval: 10s
     #   timeout: 5s
     #   retries: 10
-
+    depends_on:
+      beidou-db:
+        condition: service_healthy
+    networks:
+      - beidou-network
 
   beidou-db:
     container_name: beidou-db
@@ -40,3 +48,9 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+    networks:
+      - beidou-network
+
+networks:
+  beidou-network:
+    driver: bridge
