@@ -14,7 +14,7 @@ ARG RELEASE_PREFIX_GIT_TAG=Release
 ARG RELEASE_VERSION
 
 # 根据传入的参数中的版本号取 release 中的 tar.gz
-RUN curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${RELEASE_PREFIX_GIT_TAG}${RELEASE_VERSION} \
+RUN curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${RELEASE_VERSION} \
     | jq -r '.assets[] | select(.name | endswith(".tar.gz")) | .browser_download_url' \
     | xargs -n 1 curl -fsSL -o latest_release.tar.gz
 
