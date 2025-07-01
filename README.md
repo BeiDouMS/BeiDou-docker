@@ -102,7 +102,7 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 ```
 
 
-### 若有连接问题 检查 `application.yml` 中的 ip 配置 
+### 若有连接(选人后断开连接)问题 检查 `compose.yml` 或 `application.yml` 中的 ip 配置，前者优先级更高 
 
 ### 镜像名解释
 
