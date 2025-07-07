@@ -102,7 +102,9 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 ```
 
 
-### 若有连接(选人后断开连接)问题 检查 `compose.yml` 或 `application.yml` 中的 ip 配置，前者优先级更高 
+### 常见问题
+- 选人后断开连接问题 检查 `compose.yml` 或 `application.yml` 中的 ip 配置，前者优先级更高
+- 升级版本，游戏内容没变，镜像的行为没有对文件进行覆盖，建议更改目录后重建容器。
 
 ### 镜像名解释
 
