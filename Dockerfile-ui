@@ -18,7 +18,7 @@ COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/package.json ./
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/yarn.lock ./
 
 #RUN yarn config set registry https://registry.npmmirror.com 如果打包慢使用
-RUN yarn upgrade && yarn install --frozen-lockfile
+RUN yarn global add yarn@v1.22.10 && yarn install --frozen-lockfile
 
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/ ./
 
