@@ -25,6 +25,10 @@ RUN tar -xzvf latest_release.tar.gz -C /opt/server_unzip --strip-components=1
 # alpine好像缺点东西
 FROM ubuntu:20.04
 
+ENV LANG=C.UTF-8
+
+ENV LC_ALL=C.UTF-8
+
 COPY --from=builder /opt/server_unzip /opt/server_backup
 
 COPY entrypoint-release.sh /
