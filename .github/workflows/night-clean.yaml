@@ -19,6 +19,10 @@ concurrency:
 jobs:
   ghcr-cleanup-untag:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     steps:
       - uses: dataaxiom/ghcr-cleanup-action@v1
         with:
