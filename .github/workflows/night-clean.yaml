@@ -24,5 +24,5 @@ jobs:
         with:
           delete-untagged: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          packages: ghcr.io/beidoums/beidou-server,ghcr.io/beidoums/beidou-ui
+          packages: beidou-server,beidou-ui
           dry-run: true
