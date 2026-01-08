@@ -8,7 +8,11 @@ ARG CACHEBUST=1
 
 RUN git clone https://github.com/BeiDouMS/BeiDou-Server --depth 1
 
-FROM node:20.15.0 AS builder
+FROM node:20 AS builder
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      optipng build-essential ca-certificates pkg-config libpng-dev zlib1g-dev python3 make gcc g++
 
 WORKDIR /opt/ui
 
@@ -17,8 +21,11 @@ COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/package.json ./
 # for caching
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/yarn.lock ./
 
-#RUN yarn config set registry https://registry.npmmirror.com 如果打包慢使用
-RUN yarn global add yarn@v1.22.10 && yarn install --frozen-lockfile
+RUN yarn global add yarn@v1.22.10 && \
+    yarn install --frozen-lockfile --ignore-scripts && \
+    PLATFORM=$(node -p "process.platform + '-' + process.arch") && \
+    mkdir -p node_modules/optipng-bin/vendor/$PLATFORM && \
+    ln -sf /usr/bin/optipng node_modules/optipng-bin/vendor/$PLATFORM/optipng
 
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/ ./
 
