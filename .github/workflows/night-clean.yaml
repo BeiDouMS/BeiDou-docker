@@ -2,9 +2,9 @@ name: BeiDou Clean Untagged Image Workflow
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   # 这个 cron 表达式表示每天的 23:00 UTC 触发
-  #   - cron: '0 23 * * *'
+  schedule:
+    # 这个 cron 表达式表示每天的 23:00 UTC 触发
+    - cron: '0 23 * * *'
 
 env:
   GHCR_REGISTRY: ghcr.io
@@ -24,5 +24,5 @@ jobs:
         with:
           delete-untagged: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          packages: beidou-server,beidou-ui
-          dry-run: true
+          packages: ${{ env.BACKEND_IMAGE }},${{ env.FRONTEND_IMAGE }}
+          # dry-run: true
