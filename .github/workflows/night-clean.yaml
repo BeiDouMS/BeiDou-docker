@@ -1,0 +1,28 @@
+name: BeiDou Clean Untagged Image Workflow
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   # 这个 cron 表达式表示每天的 23:00 UTC 触发
+  #   - cron: '0 23 * * *'
+
+env:
+  GHCR_REGISTRY: ghcr.io
+  BACKEND_IMAGE: beidou-server
+  FRONTEND_IMAGE: beidou-ui
+
+concurrency: 
+  group: ${{github.workflow}} - ${{github.ref}}
+  cancel-in-progress: true
+
+
+jobs:
+  ghcr-cleanup-untag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          delete-untagged: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          packages: beidoums/beidou-server,beidoums/beidou-ui
+          dry-run: true
