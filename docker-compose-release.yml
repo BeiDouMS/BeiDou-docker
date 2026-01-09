@@ -38,8 +38,8 @@ services:
     environment:
       # mysql root 默认密码
       MYSQL_ROOT_PASSWORD: "root" 
-    ports:
-      - "3306:3306"
+    # ports:
+    #   - "3306:3306"
     volumes:
       - ./docker-db-data:/var/lib/mysql
     healthcheck:
@@ -50,6 +50,30 @@ services:
       start_period: 10s
     networks:
       - beidou-network
+
+#  adminer:
+#    image: adminer
+#    container_name: beidou-db-adminer
+#    ports:
+#      - 8080:8080
+#    networks:
+#      - beidou-network
+      
+#  phpmyadmin:
+#    image: phpmyadmin
+#    container_name: beidou-db-phpmyadmin
+#    ports:
+#      - 8081:80
+#    environment:
+#      PMA_ARBITRARY: 0
+#      PMA_VERBOSE: beidou 数据库
+#      PMA_HOST: beidou-db
+#      PMA_PORT: 3306
+#      PMA_USER: root
+#      PMA_PASSWORD: root
+#      TZ: Asia/Shanghai
+#    networks:
+#      - beidou-network
 
 networks:
   beidou-network:
