@@ -13,4 +13,4 @@ fi
 
 rm -rf $working_dir_bak
 
-cd $working_dir && ./jdk-21.0.2/bin/java -jar ./BeiDou.jar --spring.config.location=./application.yml $@
+cd $working_dir && ./jdk-21.0.2/bin/java ${JAVA_OPTS} -jar ./BeiDou.jar --spring.config.location=./application.yml $@
