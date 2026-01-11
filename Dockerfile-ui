@@ -21,6 +21,8 @@ COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/package.json ./
 # for caching
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/yarn.lock ./
 
+#RUN yarn global add yarn@v1.22.10 && yarn install --frozen-lockfile
+#arm 架构 optipng 编译有问题 所以这里使用预装的 amd64可以使用上面的
 RUN yarn global add yarn@v1.22.10 && \
     yarn install --frozen-lockfile --ignore-scripts && \
     PLATFORM=$(node -p "process.platform + '-' + process.arch") && \
