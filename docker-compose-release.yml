@@ -18,9 +18,9 @@ services:
       - --mybatis-flex.datasource.mysql.url=jdbc:mysql://beidou-db:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
       - --mybatis-flex.datasource.mysql.username=root
       - --mybatis-flex.datasource.mysql.password=root
-      - --gms.service.wan-host=127.0.0.1
-      - --gms.service.lan-host=127.0.0.1
-      - --gms.service.localhost=127.0.0.1
+      - --gms.service.wan-host=127.0.0.1 #动态IP映射的域名最多15字节
+      - --gms.service.lan-host=127.0.0.1 #动态IP映射的域名最多15字节
+      - --gms.service.localhost=127.0.0.1 #动态IP映射的域名最多15字节
     # healthcheck:
     #   test: ["CMD", "wget", "--spider", "http://localhost:8686/"]
     #   interval: 10s
