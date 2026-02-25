@@ -8,14 +8,15 @@ RUN apt-get update && \
 
 ARG GITHUB_OWNER=BeiDouMS
 ARG GITHUB_REPO=BeiDou-Server
-# ARG ASSET_NAME_PREFIX=BeiDou-Server
-# ARG ASSET_NAME_EXT=tar.gz
-ARG RELEASE_PREFIX_GIT_TAG=Release
-ARG RELEASE_VERSION
 
+ARG RELEASE_PREFIX_GIT_TAG=Release
 # 根据传入的参数中的版本号取 release 中的 tar.gz
+ARG RELEASE_VERSION
+# arm64 x64 根据架构搜索  xxxx.tar.gz
+ARG RELEASE_ARCH
+
 RUN curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${RELEASE_VERSION} \
-    | jq -r '.assets[] | select(.name | endswith(".tar.gz")) | .browser_download_url' \
+    | jq -r '.assets[] | select(.name | endswith("'${RELEASE_ARCH}'.tar.gz")) | .browser_download_url' \
     | xargs -n 1 curl -fsSL -o latest_release.tar.gz
 
 RUN mkdir -p /opt/server_unzip

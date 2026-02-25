@@ -21,6 +21,12 @@ jobs:
       packages: write
       id-token: write
       # attestations: write
+    strategy:
+      fail-fast: true
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
       - uses: actions/checkout@v4
 
@@ -46,6 +52,14 @@ jobs:
         env:
           OWNER: '${{ github.repository_owner }}'
 
+      - name: Prepare release arch
+        run: |
+          if [[ "${{ matrix.platform }}" == "linux/amd64" ]]; then
+            echo "RELEASE_ARCH=x64" >> $GITHUB_ENV
+          elif [[ "${{ matrix.platform }}" == "linux/arm64" ]]; then
+            echo "RELEASE_ARCH=arm64" >> $GITHUB_ENV
+          fi
+
       - name: Build and push
         id: push
         uses: docker/build-push-action@v6
@@ -56,11 +70,13 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USER }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
             ${{ env.GHCR_REGISTRY }}/${{ env.OWNER_LC }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=gha,scope=release-${{ matrix.platform }}
+          cache-to: type=gha,mode=max,scope=release-${{ matrix.platform }}
+          platforms: ${{ matrix.platform }}
           build-args: |
             RELEASE_VERSION=${{ inputs.release_version }}
-  
+            RELEASE_ARCH=${{ env.RELEASE_ARCH }}
+
     #   - name: Generate artifact attestation
     #     uses: actions/attest-build-provenance@v1
     #     with:
