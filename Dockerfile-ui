@@ -34,7 +34,7 @@ RUN yarn global add yarn@v1.22.10 && \
 
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/ ./
 
-RUN yarn build
+RUN yarn build --outDir ./dist
 
 FROM nginx:alpine
 
