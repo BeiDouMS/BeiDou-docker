@@ -21,6 +21,12 @@ services:
       - --gms.service.wan-host=127.0.0.1
       - --gms.service.lan-host=127.0.0.1
       - --gms.service.localhost=127.0.0.1
+      #  !!! 生产环境务必自行生成密钥(可以使用以下指令来生成) , 并关闭 swagger !!!
+      #  powershell:  -join ((1..10) | ForEach { '{0:x2}' -f (Get-Random -Maximum 256) })
+      #  bash      :  openssl rand -hex 10
+      # - --jwt.secret=<your secret key here>
+      # - --springdoc.api-docs.enabled=false
+      # - --springdoc.swagger-ui.enabled=false
     # healthcheck:
     #   test: ["CMD", "wget", "--spider", "http://localhost:8686/"]
     #   interval: 10s
@@ -37,7 +43,7 @@ services:
     image: mysql:8.4.0
     environment:
       # mysql root 默认密码
-      MYSQL_ROOT_PASSWORD: "root" 
+      MYSQL_ROOT_PASSWORD: "root"
     # ports:
     #   - "3306:3306"
     volumes:
