@@ -1,16 +1,20 @@
 #!/bin/sh
+set -e
 
 working_dir=/opt/server
-
 working_dir_bak=/opt/server_backup
- 
+marker_file="$working_dir/.initialized"
+
 mkdir -p $working_dir
 
-if [ -z "$(ls -A $working_dir)" ]; then
-    echo "first run container , cp files from backup."
-    cp -r $working_dir_bak/* $working_dir
+if [ ! -f "$marker_file" ]; then
+    echo "First run - initializing volume..."
+    cp -r $working_dir_bak/* $working_dir/
+    touch $marker_file
+    echo "Initialization complete. Backup kept for future recovery."
 fi
 
-rm -rf $working_dir_bak
+cd $working_dir \
+  && chmod +x ./jdk-21.0.10+7-jre/bin/java \
+  && exec ./jdk-21.0.10+7-jre/bin/java ${JAVA_OPTS} -jar ./BeiDou.jar --spring.config.location=./application.yml "$@"
 
-cd $working_dir && chmod +x ./jdk-21.0.10+7-jre/bin/java && ./jdk-21.0.10+7-jre/bin/java ${JAVA_OPTS} -jar ./BeiDou.jar --spring.config.location=./application.yml $@

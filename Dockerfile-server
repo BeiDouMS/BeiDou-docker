@@ -27,15 +27,14 @@ FROM maven:3.9.6-amazoncorretto-21 AS builder
 # Build in a separated location which won't have permissions issues.
 WORKDIR /opt/build
 
-# Any changes to the pom will affect the entire build, so it should be copied first.
-COPY --from=codestage /opt/repository/BeiDou-Server/pom.xml ./pom.xml
-COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/src ./gms-server/src
-COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/pom.xml ./gms-server/pom.xml
+COPY --from=codestage /opt/repository/BeiDou-Server/pom.xml                 ./pom.xml
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/pom.xml      ./gms-server/pom.xml
 
-# for caching
-RUN mvn dependency:resolve
+RUN mvn dependency:resolve -B --no-transfer-progress
 
-RUN mvn clean package -U
+COPY --from=codestage /opt/repository/BeiDou-Server/gms-server/src          ./gms-server/src
+
+RUN mvn package -B -DskipTests --no-transfer-progress
 
 RUN mkdir result && mv ./gms-server/target/BeiDou.jar ./result/BeiDou.jar
 

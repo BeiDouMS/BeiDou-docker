@@ -1,0 +1,4 @@
+beidou-server-nightly/
+beidou-server-release/
+temp/
+docker-db-data/
