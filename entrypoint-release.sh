@@ -14,7 +14,11 @@ if [ ! -f "$marker_file" ]; then
     echo "Initialization complete. Backup kept for future recovery."
 fi
 
-cd $working_dir \
-  && chmod +x ./jdk-21.0.10+7-jre/bin/java \
-  && exec ./jdk-21.0.10+7-jre/bin/java ${JAVA_OPTS} -jar ./BeiDou.jar --spring.config.location=./application.yml "$@"
+cd $working_dir
+
+JAVA_EXEC=$(find . -type f -name java -path "*/bin/java" | head -1)
+
+chmod +x "$JAVA_EXEC"
+
+exec "$JAVA_EXEC" ${JAVA_OPTS} -jar ./BeiDou.jar --spring.config.location=./application.yml "$@"
 

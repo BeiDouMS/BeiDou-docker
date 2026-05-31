@@ -14,6 +14,7 @@ if [ ! -f "$marker_file" ]; then
     echo "Initialization complete. Backup kept for future recovery."
 fi
 
-cd $working_dir \
-  && exec java ${JAVA_OPTS} -jar ./BeiDou.jar --spring.config.location=./application.yml "$@"
+cd $working_dir
+
+exec java ${JAVA_OPTS} -jar ./BeiDou.jar --spring.config.location=./application.yml "$@"
 
