@@ -67,11 +67,12 @@ sudo docker compose -f docker-compose-release.yml logs --tail 500
 使用尝鲜版
  
 ```shell
-# 要使用最新的构建 (每日定时构建)  
+# 要使用最新的构建 (每日定时构建)
 
 # docker.io 源
 # sleepnap/beidou-ui:nightly
 # sleepnap/beidou-server:nightly
+# sleepnap/beidou-server:nightly-openj9 (内存紧张的用户可以使用这个，配合mariadb)
 
 # ghcr.io 源
 # ghcr.io/beidoums/beidou-ui:nightly
