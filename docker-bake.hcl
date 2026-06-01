@@ -89,10 +89,10 @@ target "release" {
   context    = "./release"
   dockerfile = "./docker/release.Dockerfile"
   matrix = {
-    platform_with_alias = {
-      "linux/amd64" = { platform = "linux/amd64", alias = "x64" }
-      "linux/arm64" = { platform = "linux/arm64", alias = "arm64" }
-    }
+    platform_with_alias = [
+      { platform = "linux/amd64", alias = "x64" },
+      { platform = "linux/arm64", alias = "arm64" }
+    ]
   }
   platforms = [platform_with_alias.platform]
   tags = [
