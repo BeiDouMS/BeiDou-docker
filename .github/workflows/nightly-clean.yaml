@@ -24,7 +24,7 @@ jobs:
       packages: write
       id-token: write
     steps:
-      - uses: dataaxiom/ghcr-cleanup-action@v1
+      - uses: dataaxiom/ghcr-cleanup-action@v1.2.1
         with:
           delete-untagged: true
           token: ${{ secrets.GITHUB_TOKEN }}
