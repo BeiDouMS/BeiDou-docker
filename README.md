@@ -123,5 +123,5 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 ### 关于自己打包
 
 
-目前打包方式向着 bake 打包过度， 旧的 Dockerfile 迁移至 old/ .
+目前打包方式向着 bake 打包过渡， 旧的 Dockerfile 迁移至 old/ .
 
