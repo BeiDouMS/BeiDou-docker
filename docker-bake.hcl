@@ -1,9 +1,3 @@
-# group "default" {
-#   targets = [
-#     "frontend",
-#     "backend"
-#   ]
-# }
 variable "CACHEBUST" {
   default = 1
 }
@@ -23,7 +17,6 @@ variable "IMAGE_TAG_FRONTEND_GHCR" {
 variable "IMAGE_TAG_FRONTEND_DOCKER" {
   default = "beidou-ui:latest"
 }
-
 
 target "backend" {
   name       = "backend-${jre.name}"
@@ -67,6 +60,48 @@ target "frontend" {
   ]
   args = {
     CACHEBUST = "${CACHEBUST}"
+  }
+  labels = {
+    "org.opencontainers.image.created" = "${timestamp()}"
+  }
+}
+
+#####################################################################################
+
+variable "IMAGE_TAG_RELEASE_GHCR" {
+  default = "beidou-server-all:latest"
+}
+
+variable "IMAGE_TAG_RELEASE_DOCKER" {
+  default = "beidou-server-all:latest"
+}
+
+variable "ARG_RELEASE_VERSION" {
+  default = "1.11"
+}
+# 不需要传入 arch , 让 bake 处理
+# variable "ARG_RELEASE_ARCH" {
+#   default = "x64"
+# }
+
+target "release" {
+  name       = "release-${platform_with_alias.alias}"
+  context    = "./release"
+  dockerfile = "./docker/release.Dockerfile"
+  matrix = {
+    platform_with_alias = {
+      "linux/amd64" = { platform = "linux/amd64", alias = "x64" }
+      "linux/arm64" = { platform = "linux/arm64", alias = "arm64" }
+    }
+  }
+  platforms = [platform_with_alias.platform]
+  tags = [
+    "${IMAGE_TAG_RELEASE_GHCR}",
+    "${IMAGE_TAG_RELEASE_DOCKER}"
+  ]
+  args = {
+    RELEASE_VERSION = "${ARG_RELEASE_VERSION}"
+    RELEASE_ARCH    = platform_with_alias.alias
   }
   labels = {
     "org.opencontainers.image.created" = "${timestamp()}"
