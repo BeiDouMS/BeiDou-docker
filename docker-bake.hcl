@@ -4,9 +4,29 @@
 #     "backend"
 #   ]
 # }
+variable "CACHEBUST" {
+  default = 1
+}
+
+variable "IMAGE_TAG_BACKEND_GHCR" {
+  default = "beidou-server:latest"
+}
+
+variable "IMAGE_TAG_BACKEND_DOCKER" {
+  default = "beidou-server:latest"
+}
+
+variable "IMAGE_TAG_FRONTEND_GHCR" {
+  default = "beidou-ui:latest"
+}
+
+variable "IMAGE_TAG_FRONTEND_DOCKER" {
+  default = "beidou-ui:latest"
+}
+
 
 target "backend" {
-  name = "backend-${jre.name}"
+  name       = "backend-${jre.name}"
   context    = "./nightly"
   dockerfile = "./docker/backend.Dockerfile"
   platforms = [
@@ -15,18 +35,19 @@ target "backend" {
   ]
   matrix = {
     jre = [
-      { name = "openj9",  image = "ibm-semeru-runtimes:open-21-jre-noble" },
+      { name = "openj9", image = "ibm-semeru-runtimes:open-21-jre-noble" },
       { name = "temurin", image = "eclipse-temurin:21-jre-alpine" },
     ]
   }
   tags = [
-    "ghcr.io/beidoums/beidou-server:nightly-${jre.name}",
-    "sleepnap/beidou-server:nightly-${jre.name}",
-    jre.name == "temurin" ? "ghcr.io/beidoums/beidou-server:nightly" : "",
-    jre.name == "temurin" ? "sleepnap/beidou-server:nightly" : "",
+    "${IMAGE_TAG_BACKEND_GHCR}-${jre.name}",
+    "${IMAGE_TAG_BACKEND_DOCKER}-${jre.name}",
+    jre.name == "temurin" ? "${IMAGE_TAG_BACKEND_GHCR}" : "",
+    jre.name == "temurin" ? "${IMAGE_TAG_BACKEND_DOCKER}" : "",
   ]
   args = {
     RUNTIME_JRE_IMAGE = jre.image
+    CACHEBUST         = "${CACHEBUST}"
   }
   labels = {
     "org.opencontainers.image.created" = "${timestamp()}"
@@ -41,9 +62,12 @@ target "frontend" {
     "linux/arm64"
   ]
   tags = [
-    "ghcr.io/beidoums/beidou-ui:nightly",
-    "sleepnap/beidou-ui:nightly",
+    "${IMAGE_TAG_FRONTEND_GHCR}",
+    "${IMAGE_TAG_FRONTEND_DOCKER}",
   ]
+  args = {
+    CACHEBUST = "${CACHEBUST}"
+  }
   labels = {
     "org.opencontainers.image.created" = "${timestamp()}"
   }

@@ -5,6 +5,15 @@ on:
   schedule:
     - cron: '0 21 * * *'
 
+env:
+  GHCR_REGISTRY: ghcr.io
+  GHCR_NAMESPACE: beidoums
+  DOCKER_REGISTRY: docker.io
+  DOCKER_NAMESPACE: ${{ secrets.DOCKER_USER }}
+  BACKEND_IMAGE: beidou-server
+  FRONTEND_IMAGE: beidou-ui
+  VERSION_PREFIX: nightly
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -45,10 +54,13 @@ jobs:
           files: docker-bake.hcl
           targets: backend
           set: |
-            *.args.CACHEBUST=${{ github.run_id }}
             *.cache-from=type=gha,scope=backend
             *.cache-to=type=gha,mode=max,scope=backend
           push: true
+        env:
+          IMAGE_TAG_BACKEND_GHCR: ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_NAMESPACE }}/${{ env.BACKEND_IMAGE }}:${{ env.VERSION_PREFIX }}
+          IMAGE_TAG_BACKEND_DOCKER: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.BACKEND_IMAGE }}:${{ env.VERSION_PREFIX }}
+          CACHEBUST: ${{ github.run_id }}
 
   Frontend:
     runs-on: ubuntu-latest
@@ -80,7 +92,10 @@ jobs:
           files: docker-bake.hcl
           targets: frontend
           set: |
-            *.args.CACHEBUST=${{ github.run_id }}
             *.cache-from=type=gha,scope=frontend
             *.cache-to=type=gha,mode=max,scope=frontend
           push: true
+        env:
+          IMAGE_TAG_FRONTEND_GHCR: ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_NAMESPACE }}/${{ env.FRONTEND_IMAGE }}:${{ env.VERSION_PREFIX }}
+          IMAGE_TAG_FRONTEND_DOCKER: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.FRONTEND_IMAGE }}:${{ env.VERSION_PREFIX }}
+          CACHEBUST: ${{ github.run_id }}
