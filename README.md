@@ -118,3 +118,10 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 `beidou-server-all:<version>` 为带有版本号的稳定版
 
 `beidou-server:nightly` , `beidou-ui:nightly` 是每日五点基于最新代码构建的尝鲜版，前后端分开打包，需要一起安装，推荐使用 `docker-compose`
+
+
+### 关于自己打包
+
+```
+目前打包方式向着 bake 打包过度， 旧的 Dockerfile 迁移至 old/ .
+```
