@@ -4,9 +4,6 @@ services:
     container_name: beidou-server
     # nightly 为每日构建
     image: ghcr.io/beidoums/beidou-server:nightly
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile-server
     environment:
       TZ: Asia/Shanghai
     ports:
@@ -49,11 +46,8 @@ services:
     container_name: beidou-ui
     # nightly 为每日构建
     image: ghcr.io/beidoums/beidou-ui:nightly
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile-ui
     # volumes:
-    #   - ./nginx-ui.conf:/etc/nginx/conf.d/default.conf
+    #   - ./nightly/nginx-ui.conf:/etc/nginx/conf.d/default.conf
     ports:
       # Web
       - "8686:8686"

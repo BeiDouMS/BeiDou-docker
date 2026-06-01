@@ -7,8 +7,8 @@
 
 target "backend" {
   name = "backend-${jre.name}"
-  context    = "."
-  dockerfile = "./nightly/backend.Dockerfile"
+  context    = "./nightly"
+  dockerfile = "./docker/backend.Dockerfile"
   platforms = [
     "linux/amd64",
     "linux/arm64"
@@ -22,8 +22,8 @@ target "backend" {
   tags = [
     "ghcr.io/beidoums/beidou-server:nightly-${jre.name}",
     "sleepnap/beidou-server:nightly-${jre.name}",
-    # jre.name == "temurin" ? "ghcr.io/beidoums/beidou-server:nightly" : "",
-    # jre.name == "temurin" ? "sleepnap/beidou-server:nightly" : "",
+    jre.name == "temurin" ? "ghcr.io/beidoums/beidou-server:nightly" : "",
+    jre.name == "temurin" ? "sleepnap/beidou-server:nightly" : "",
   ]
   args = {
     RUNTIME_JRE_IMAGE = jre.image
@@ -34,8 +34,8 @@ target "backend" {
 }
 
 target "frontend" {
-  context    = "."
-  dockerfile = "./nightly/frontend.Dockerfile"
+  context    = "./nightly"
+  dockerfile = "./docker/frontend.Dockerfile"
   platforms = [
     "linux/amd64",
     "linux/arm64"
