@@ -77,6 +77,7 @@ sudo docker compose -f docker-compose-release.yml logs --tail 500
 # ghcr.io 源
 # ghcr.io/beidoums/beidou-ui:nightly
 # ghcr.io/beidoums/beidou-server:nightly
+# ghcr.io/beidoums/beidou-server:nightly-openj9 (内存紧张的用户可以使用这个，配合mariadb)
 
 git clone https://github.com/BeiDouMS/BeiDou-docker && cd BeiDou-docker
 
