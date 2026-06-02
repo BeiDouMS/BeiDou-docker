@@ -1,0 +1,86 @@
+version: '3.4'
+services:
+  beidou-server-all:
+    container_name: beidou-server-all
+    image: ghcr.io/beidoums/beidou-server-all:v1.11
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      # Web
+      - "8686:8686" 
+      # Login server
+      - "8484:8484"
+      # Channels.
+      - "7575-7577:7575-7577"
+    volumes:
+      - ./beidou-server-release:/opt/server
+    command: 
+      - --mybatis-flex.datasource.mysql.url=jdbc:mysql://beidou-db:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      - --mybatis-flex.datasource.mysql.username=root
+      - --mybatis-flex.datasource.mysql.password=root
+      - --gms.service.wan-host=127.0.0.1
+      - --gms.service.lan-host=127.0.0.1
+      - --gms.service.localhost=127.0.0.1
+      #  !!! 生产环境务必自行生成密钥(可以使用以下指令来生成) , 并关闭 swagger !!!
+      #  powershell:  -join ((1..10) | ForEach { '{0:x2}' -f (Get-Random -Maximum 256) })
+      #  bash      :  openssl rand -hex 10
+      # - --jwt.secret=<your secret key here>
+      # - --springdoc.api-docs.enabled=false
+      # - --springdoc.swagger-ui.enabled=false
+    # healthcheck:
+    #   test: ["CMD", "wget", "--spider", "http://localhost:8686/"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 10
+    depends_on:
+      beidou-db:
+        condition: service_healthy
+    networks:
+      - beidou-network
+
+  beidou-db:
+    container_name: beidou-db
+    image: mysql:8.4.0
+    environment:
+      # mysql root 默认密码
+      MYSQL_ROOT_PASSWORD: "root"
+    # ports:
+    #   - "3306:3306"
+    volumes:
+      - ./docker-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - beidou-network
+
+#  adminer:
+#    image: adminer
+#    container_name: beidou-db-adminer
+#    ports:
+#      - 8080:8080
+#    networks:
+#      - beidou-network
+      
+#  phpmyadmin:
+#    image: phpmyadmin
+#    container_name: beidou-db-phpmyadmin
+#    ports:
+#      - 8081:80
+#    environment:
+#      PMA_ARBITRARY: 0
+#      PMA_VERBOSE: beidou 数据库
+#      PMA_HOST: beidou-db
+#      PMA_PORT: 3306
+#      PMA_USER: root
+#      PMA_PASSWORD: root
+#      TZ: Asia/Shanghai
+#    networks:
+#      - beidou-network
+
+networks:
+  beidou-network:
+    driver: bridge
