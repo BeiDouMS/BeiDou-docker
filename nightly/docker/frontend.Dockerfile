@@ -1,6 +1,6 @@
 FROM alpine AS codestage
 
-RUN apk add --no-cache git 
+RUN apk add --no-cache git
 
 WORKDIR /opt/repository
 
@@ -10,10 +10,14 @@ RUN git clone https://github.com/BeiDouMS/BeiDou-Server --depth 1
 
 FROM node:20 AS builder
 
+ARG TARGETARCH
+
 #arm 架构 optipng 编译有问题 所以这里使用预装的 optipng
-RUN apt-get update && \
+RUN if [ "$TARGETARCH" = "arm64" ]; then \ 
+    apt-get update && \
     apt-get install -y --no-install-recommends \
-      optipng build-essential ca-certificates pkg-config libpng-dev zlib1g-dev python3 make gcc g++
+    optipng build-essential ca-certificates pkg-config libpng-dev zlib1g-dev python3 make gcc g++; \
+    fi
 
 WORKDIR /opt/ui
 
@@ -22,15 +26,18 @@ COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/package.json ./
 # for caching
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/yarn.lock ./
 
-# amd64 构建无需这么麻烦，是可选替换
-# RUN yarn global add yarn@v1.22.10 && yarn install --frozen-lockfile
-
 # arm 架构 optipng 编译有问题 所以这里使用预装的 optipng
 RUN yarn global add yarn@v1.22.10 && \
+    if [ "$TARGETARCH" = "amd64" ]; then \
+    yarn install --frozen-lockfile; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
     yarn install --frozen-lockfile --ignore-scripts && \
-    PLATFORM=$(node -p "process.platform + '-' + process.arch") && \
+    PLATFORM="linux-arm" && \
     mkdir -p node_modules/optipng-bin/vendor/$PLATFORM && \
-    ln -sf /usr/bin/optipng node_modules/optipng-bin/vendor/$PLATFORM/optipng
+    ln -sf /usr/bin/optipng node_modules/optipng-bin/vendor/$PLATFORM/optipng; \
+    else \
+    yarn install --frozen-lockfile; \
+    fi
 
 COPY --from=codestage /opt/repository/BeiDou-Server/gms-ui/ ./
 
