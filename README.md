@@ -102,6 +102,14 @@ sudo docker compose -f docker-compose-nightly.yml logs --tail 500
 # beidou-server-nightly/wz
 # beidou-server-nightly/wz-zh-CN
 ```
+### TAG 说明
+
+| runtime image   | architecture | tag                       |
+| --------------- | ------------ | ------------------------- |
+| temurin         | x86_64       | nightly, nightly-temurin  |
+| temurin         | arm64        | nightly, nightly-temurin  |
+| openj9          | x86_64       | nightly-openj9            |
+| openj9          | arm64        | nightly-openj9            |
 
 
 ### 常见问题
