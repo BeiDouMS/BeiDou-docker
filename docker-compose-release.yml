@@ -14,6 +14,7 @@ services:
       - "7575-7577:7575-7577"
     volumes:
       - ./beidou-server-release:/opt/server
+    # 注意 命令行参数的优先级高于 application.yml 配置文件
     command: 
       - --mybatis-flex.datasource.mysql.url=jdbc:mysql://beidou-db:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
       - --mybatis-flex.datasource.mysql.username=root
