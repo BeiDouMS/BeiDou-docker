@@ -96,8 +96,8 @@ target "release" {
   }
   platforms = [platform_with_alias.platform]
   tags = [
-    "${IMAGE_TAG_RELEASE_GHCR}",
-    "${IMAGE_TAG_RELEASE_DOCKER}"
+    "${IMAGE_TAG_RELEASE_GHCR}-${platform_with_alias.alias}",
+    "${IMAGE_TAG_RELEASE_DOCKER}-${platform_with_alias.alias}"
   ]
   args = {
     RELEASE_VERSION = "${ARG_RELEASE_VERSION}"
