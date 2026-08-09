@@ -85,23 +85,19 @@ variable "ARG_RELEASE_VERSION" {
 # }
 
 target "release" {
-  name       = "release-${platform_with_alias.alias}"
   context    = "./release"
   dockerfile = "./docker/release.Dockerfile"
-  matrix = {
-    platform_with_alias = [
-      { platform = "linux/amd64", alias = "x64" },
-      { platform = "linux/arm64", alias = "arm64" }
-    ]
-  }
-  platforms = [platform_with_alias.platform]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64"
+  ]
   tags = [
-    "${IMAGE_TAG_RELEASE_GHCR}-${platform_with_alias.alias}",
-    "${IMAGE_TAG_RELEASE_DOCKER}-${platform_with_alias.alias}"
+    "${IMAGE_TAG_RELEASE_GHCR}",
+    "${IMAGE_TAG_RELEASE_DOCKER}"
   ]
   args = {
     RELEASE_VERSION = "${ARG_RELEASE_VERSION}"
-    RELEASE_ARCH    = platform_with_alias.alias
+    # RELEASE_ARCH    = platform_with_alias.alias
   }
   labels = {
     "org.opencontainers.image.created" = "${timestamp()}"

@@ -13,10 +13,18 @@ ARG RELEASE_PREFIX_GIT_TAG=Release
 # 根据传入的参数中的版本号取 release 中的 tar.gz
 ARG RELEASE_VERSION
 # arm64 x64 根据架构搜索  xxxx.tar.gz
-ARG RELEASE_ARCH
+# ARG RELEASE_ARCH
 
-RUN curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${RELEASE_VERSION} \
-    | jq -r '.assets[] | select(.name | endswith("'${RELEASE_ARCH}'.tar.gz")) | .browser_download_url' \
+# RUN curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${RELEASE_VERSION} \
+#     | jq -r '.assets[] | select(.name | endswith("'${RELEASE_ARCH}'.tar.gz")) | .browser_download_url' \
+#     | xargs -n 1 curl -fsSL -o latest_release.tar.gz
+
+ARG TARGETARCH
+
+RUN arch=$(case "$TARGETARCH" in amd64) echo x64 ;; arm64) echo arm64 ;; esac) \
+ && curl -s https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${RELEASE_VERSION} \
+    | jq -r --arg suffix "${arch}.tar.gz" \
+      '.assets[] | select(.name | endswith($suffix)) | .browser_download_url' \
     | xargs -n 1 curl -fsSL -o latest_release.tar.gz
 
 RUN mkdir -p /opt/server_unzip

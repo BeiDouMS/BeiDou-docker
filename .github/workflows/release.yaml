@@ -63,31 +63,3 @@ jobs:
           IMAGE_TAG_RELEASE_GHCR: ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_NAMESPACE }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
           IMAGE_TAG_RELEASE_DOCKER: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
           ARG_RELEASE_VERSION: ${{ inputs.release_version }}
-
-      - name: Merge multi-architecture manifests
-        env:
-          IMAGE_TAG_RELEASE_GHCR: ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_NAMESPACE }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
-          IMAGE_TAG_RELEASE_DOCKER: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
-        run: |
-          docker buildx imagetools create \
-            --tag "${IMAGE_TAG_RELEASE_GHCR}" \
-            "${IMAGE_TAG_RELEASE_GHCR}-x64" \
-            "${IMAGE_TAG_RELEASE_GHCR}-arm64"
-
-          docker buildx imagetools create \
-            --tag "${IMAGE_TAG_RELEASE_DOCKER}" \
-            "${IMAGE_TAG_RELEASE_DOCKER}-x64" \
-            "${IMAGE_TAG_RELEASE_DOCKER}-arm64"
-
-      - name: Verify multi-architecture manifests
-        env:
-          IMAGE_TAG_RELEASE_GHCR: ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_NAMESPACE }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
-          IMAGE_TAG_RELEASE_DOCKER: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.RELEASE_IMAGE }}:v${{ inputs.release_version }}
-        run: |
-          for image in "$IMAGE_TAG_RELEASE_GHCR" "$IMAGE_TAG_RELEASE_DOCKER"; do
-            result="$(docker buildx imagetools inspect "$image")"
-            echo "$result"
-
-            grep -q "linux/amd64" <<< "$result"
-            grep -q "linux/arm64" <<< "$result"
-          done
