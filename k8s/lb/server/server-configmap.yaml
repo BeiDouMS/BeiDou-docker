@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beidou-config
+  namespace: maplestory
+data:
+  MYBATIS_FLEX_DATASOURCE_URL: "jdbc:mysql://<DATABASE_HOST>:<DATABASE_PORT>/<DATABASE_NAME>?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai"
+  MYBATIS_FLEX_DATASOURCE_USERNAME: "<DATABASE_USERNAME>"
+  MYBATIS_FLEX_DATASOURCE_PASSWORD: "<DATABASE_PASSWORD>"
+  GMS_SERVICE_WAN_HOST: "${LoadBalancerIP}"
+  GMS_SERVICE_LAN_HOST: "${LoadBalancerIP}"
+  GMS_SERVICE_LOCALHOST: "127.0.0.1"
+  #  !!! 生产环境务必自行生成密钥(可以使用以下指令来生成) , 并关闭 swagger !!!
+  #  powershell:  -join ((1..10) | ForEach { '{0:x2}' -f (Get-Random -Maximum 256) })
+  #  bash      :  openssl rand -hex 10
+  JWT_SECRET: "5b2ccf25ae7e8dff98c8"
+  SPRINGBOOT_API_DOCS_ENABLED: "false"
+  SPRINGBOOT_SWAGGER_UI_ENABLED: "false"
+

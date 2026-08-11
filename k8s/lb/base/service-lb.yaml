@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: beidou-service-lb
+  namespace: maplestory
+spec:
+  type: LoadBalancer
+  selector:
+    app: beidou
+  ports:
+    - name: port-8686
+      protocol: TCP
+      port: 8686
+      targetPort: 8686
+    - name: port-8484
+      protocol: TCP
+      port: 8484
+      targetPort: 8484
+    - name: port-7575
+      protocol: TCP
+      port: 7575
+      targetPort: 7575
+    - name: port-7576
+      protocol: TCP
+      port: 7576
+      targetPort: 7576
+    - name: port-7577
+      protocol: TCP
+      port: 7577
+      targetPort: 7577
