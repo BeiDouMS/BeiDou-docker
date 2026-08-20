@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beidou-deployment
+  namespace: maplestory
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: beidou
+  template:
+    metadata:
+      labels:
+        app: beidou
+    spec:
+      containers:
+      - name: beidou-server
+        image: ghcr.io/beidoums/beidou-server-all:v1.12
+        ports:
+        - containerPort: 8686
+        - containerPort: 8484
+        - containerPort: 7575
+        - containerPort: 7576
+        - containerPort: 7577
+        envFrom:
+        - configMapRef:
+            name: beidou-config
+        args:
+        - "--mybatis-flex.datasource.mysql.url=$(MYBATIS_FLEX_DATASOURCE_URL)"
+        - "--mybatis-flex.datasource.mysql.username=$(MYBATIS_FLEX_DATASOURCE_USERNAME)"
+        - "--mybatis-flex.datasource.mysql.password=$(MYBATIS_FLEX_DATASOURCE_PASSWORD)"
+        - "--gms-service.wan-host=$(GMS_SERVICE_WAN_HOST)" 
+        - "--gms-service.lan-host=$(GMS_SERVICE_LAN_HOST)"
+        - "--gms-service.localhost=$(GMS_SERVICE_LOCALHOST)"
+        - "--jwt.secret=$(JWT_SECRET)"
+        - "--springdoc.api-docs.enabled=$(SPRINGBOOT_API_DOCS_ENABLED)"
+        - "--springdoc.swagger-ui.enabled=$(SPRINGBOOT_SWAGGER_UI_ENABLED)"
+        livenessProbe:   # 存活探针：检测容器是否还活着，失败则重启容器
+          httpGet:
+            path: /
+            port: 8686
+          periodSeconds: 10     # 对应 interval: 10s
+          timeoutSeconds: 5     # 对应 timeout: 5s
+          failureThreshold: 10  # 对应 retries: 10
+          initialDelaySeconds: 30  # 给应用启动留出时间（根据应用启动速度调整
